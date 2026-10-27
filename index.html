@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ทบทวนความสัมพันธ์ ม.4</title>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --board:#14383d; --board2:#1c4a50; --chalk:#f4f6f0; --dim:#b9cfcb;
+  --yellow:#ffd95a; --mint:#7be0b0; --peach:#ffb48a; --line:rgba(244,246,240,.28);
+}
+*{box-sizing:border-box;margin:0}
+html,body{min-height:100%}
+body{
+  font-family:'Sarabun',system-ui,sans-serif;background:var(--board);color:var(--chalk);
+  background-image:radial-gradient(circle at 20% 10%,rgba(255,255,255,.06),transparent 40%),radial-gradient(circle at 85% 90%,rgba(255,255,255,.05),transparent 45%);
+  display:flex;justify-content:center;padding:20px 16px 40px;font-size:18px;line-height:1.55;
+}
+.wrap{width:100%;max-width:720px}
+h1,h2,.q{font-family:'Mali','Sarabun',sans-serif}
+.screen{display:none}.screen.on{display:block}
+.hero{text-align:center;padding:36px 8px}
+.hero h1{font-size:clamp(30px,7vw,46px);line-height:1.25;color:var(--yellow);margin-bottom:10px}
+.hero .sym{font-family:'Mali',sans-serif;font-size:22px;color:var(--dim);margin-bottom:22px;letter-spacing:.04em}
+.rules{display:inline-block;text-align:left;border:2px dashed var(--line);border-radius:14px;padding:14px 22px;margin:8px 0 28px;color:var(--chalk)}
+.rules li{margin:4px 0 4px 18px}
+.btn{font:700 20px 'Mali','Sarabun',sans-serif;background:var(--yellow);color:#2b2a14;border:0;border-radius:999px;padding:12px 34px;cursor:pointer;box-shadow:0 4px 0 #c9a62f;transition:transform .08s}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 #c9a62f}
+.btn:focus-visible,.opt:focus-visible{outline:3px solid var(--chalk);outline-offset:3px}
+.top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-family:'Mali',sans-serif}
+.pill{border:2px solid var(--line);border-radius:999px;padding:2px 16px;font-size:17px}
+.pill b{color:var(--yellow)}
+.bar{height:12px;border-radius:99px;background:rgba(0,0,0,.25);overflow:hidden;margin-bottom:6px}
+.bar i{display:block;height:100%;width:100%;background:var(--mint);transform-origin:left;transition:background .3s}
+.bar i.low{background:var(--peach)}
+.sec{text-align:right;font-family:'Mali',sans-serif;color:var(--dim);font-size:16px;margin-bottom:12px}
+.board{background:var(--board2);border:3px solid var(--line);border-radius:18px;padding:22px 20px}
+.q{font-size:clamp(20px,4.6vw,26px);line-height:1.5;margin-bottom:18px;font-weight:700}
+.opts{display:grid;gap:10px}
+.opt{display:flex;gap:12px;align-items:center;text-align:left;width:100%;font:600 19px 'Sarabun',sans-serif;color:var(--chalk);background:transparent;border:2px solid var(--line);border-radius:12px;padding:12px 14px;cursor:pointer;transition:background .15s,border-color .15s}
+.opt:hover:not(:disabled){background:rgba(255,255,255,.08);border-color:var(--chalk)}
+.opt .k{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:15px;font-family:'Mali',sans-serif}
+.opt:disabled{cursor:default}
+.opt.right{background:rgba(123,224,176,.18);border-color:var(--mint)}
+.opt.right .k{background:var(--mint);color:#0f2e24;border-color:var(--mint)}
+.opt.wrong{border-color:var(--peach);background:rgba(255,180,138,.12)}
+.opt.dim{opacity:.55}
+.fb{margin-top:16px;border-radius:12px;padding:14px 16px;display:none}
+.fb.on{display:block;animation:pop .25s ease-out}
+.fb.ok{background:rgba(123,224,176,.15);border:2px solid var(--mint)}
+.fb.no{background:rgba(255,180,138,.13);border:2px solid var(--peach)}
+.fb h3{font-family:'Mali',sans-serif;font-size:20px;margin-bottom:4px}
+.fb p{color:var(--chalk);font-size:17px}
+.next{text-align:right;margin-top:16px;display:none}.next.on{display:block}
+.result{text-align:center;padding:30px 8px}
+.result .score{font:700 clamp(56px,16vw,90px)/1 'Mali',sans-serif;color:var(--yellow)}
+.result .of{color:var(--dim);font-family:'Mali',sans-serif;margin-bottom:14px}
+.result p.msg{max-width:30em;margin:0 auto 24px}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<section id="s-start" class="screen on hero">
+  <div class="sym">A × B &nbsp;·&nbsp; (x, y) &nbsp;·&nbsp; r ⊆ A × B</div>
+  <h1>ทบทวนท้ายคาบ<br>ความสัมพันธ์</h1>
+  <ul class="rules">
+    <li>ทั้งหมด 10 ข้อ ข้อละ 20 วินาที</li>
+    <li>ตอบถูกได้ 10 คะแนน</li>
+    <li>ตอบผิดไม่เป็นไร มีเฉลยให้ดูทุกข้อ</li>
+    <li>กดตัวเลือกด้วยเมาส์ หรือกดปุ่ม 1–4 ได้เลย</li>
+  </ul><br>
+  <button class="btn" id="go">เริ่มเลย</button>
+</section>
+
+<section id="s-play" class="screen">
+  <div class="top"><span class="pill">ข้อ <b id="no">1</b> / 10</span><span class="pill">คะแนน <b id="sc">0</b></span></div>
+  <div class="bar"><i id="fill"></i></div>
+  <div class="sec" id="sec">20 วินาที</div>
+  <div class="board">
+    <div class="q" id="q"></div>
+    <div class="opts" id="opts"></div>
+    <div class="fb" id="fb" aria-live="polite"><h3 id="fbt"></h3><p id="fbp"></p></div>
+    <div class="next" id="nx"><button class="btn" id="nb">ข้อต่อไป</button></div>
+  </div>
+</section>
+
+<section id="s-end" class="screen result">
+  <h2 id="etitle" style="font-size:30px;margin-bottom:6px"></h2>
+  <div class="score" id="escore">0</div>
+  <div class="of" id="eof">จาก 100 คะแนน</div>
+  <p class="msg" id="emsg"></p>
+  <button class="btn" id="again">เล่นอีกครั้ง</button>
+</section>
+
+</div>
+<script>
+const QS=[
+ {q:"ถ้า A = {1, 2} และ B = {a, b} แล้ว A × B มีสมาชิกกี่ตัว",o:["2","4","6","8"],a:1,e:"A × B คือเซตของคู่อันดับทั้งหมด (x, y) เมื่อ x ∈ A และ y ∈ B ได้ (1,a), (1,b), (2,a), (2,b) รวม 4 ตัว หรือคิดจาก 2 × 2 = 4"},
+ {q:"ข้อใดอธิบาย “ความสัมพันธ์ r จาก A ไป B” ได้ถูกต้อง",o:["เซตของคู่อันดับที่เป็นสับเซตของ A × B","เซตที่มีสมาชิกเท่ากับ A × B เท่านั้น","เซตของสมาชิกใน A อย่างเดียว","เซตที่ไม่มีสมาชิกร่วมกับ A × B"],a:0,e:"ความสัมพันธ์ r จาก A ไป B คือเซตใดๆ ของคู่อันดับที่เป็นสับเซตของ A × B จะเลือกมาบางคู่หรือทุกคู่ก็ได้"},
+ {q:"r = {(1, 2), (3, 4), (5, 6)} โดเมนของ r คือข้อใด",o:["{2, 4, 6}","{1, 3, 5}","{1, 2, 3, 4, 5, 6}","{(1, 2)}"],a:1,e:"โดเมนคือเซตของสมาชิกตัวหน้าของทุกคู่อันดับ ได้ {1, 3, 5}"},
+ {q:"จาก r = {(1, 2), (3, 4), (5, 6)} เรนจ์ของ r คือข้อใด",o:["{1, 3, 5}","{1, 2, 3}","{2, 4, 6}","{2, 4}"],a:2,e:"เรนจ์คือเซตของสมาชิกตัวหลังของทุกคู่อันดับ ได้ {2, 4, 6}"},
+ {q:"ให้ A = {1, 2, 3} และ r = {(x, y) ∈ A × A | y = x + 1} แล้ว r เท่ากับข้อใด",o:["{(1, 2), (2, 3)}","{(1, 2), (2, 3), (3, 4)}","{(2, 1), (3, 2)}","{(1, 1), (2, 2), (3, 3)}"],a:0,e:"ต้องให้ y อยู่ใน A ด้วย x = 1 ได้ y = 2 ใช้ได้, x = 2 ได้ y = 3 ใช้ได้, x = 3 ได้ y = 4 ซึ่งไม่อยู่ใน A จึงตัดทิ้ง"},
+ {q:"ให้ r = {(x, y) | y = 2x + 1} คู่อันดับใดเป็นสมาชิกของ r",o:["(1, 2)","(3, 6)","(4, 8)","(2, 5)"],a:3,e:"แทนค่าตรวจสอบ ที่ x = 2 ได้ y = 2(2) + 1 = 5 จึงได้ (2, 5) ส่วนข้ออื่นแทนแล้วไม่ตรง เช่น x = 1 ได้ y = 3 ไม่ใช่ 2"},
+ {q:"ถ้า n(A) = 3 และ n(B) = 4 แล้ว n(A × B) เท่ากับเท่าไร",o:["7","12","64","81"],a:1,e:"n(A × B) = n(A) × n(B) = 3 × 4 = 12 ระวังอย่าสับสนกับการบวกนะ"},
+ {q:"ถ้า (x + 1, 3) = (4, y) แล้ว x + y เท่ากับเท่าไร",o:["5","6","7","8"],a:1,e:"คู่อันดับเท่ากัน เมื่อสมาชิกตำแหน่งเดียวกันเท่ากัน x + 1 = 4 ได้ x = 3 และ y = 3 ดังนั้น x + y = 6"},
+ {q:"ถ้า r = {(1, a), (2, b)} แล้วอินเวอร์สของ r (r⁻¹) คือข้อใด",o:["{(1, a), (2, b)}","{(a, 1), (b, 2)}","{(a, 2), (b, 1)}","{(1, 2), (a, b)}"],a:1,e:"อินเวอร์สคือการสลับสมาชิกในแต่ละคู่อันดับ (x, y) กลายเป็น (y, x) ได้ {(a, 1), (b, 2)}"},
+ {q:"ให้ r = {(x, y) | y = x²} เมื่อโดเมนคือ {−1, 0, 1} เรนจ์ของ r คือข้อใด",o:["{−1, 0, 1}","{1}","{0, 1}","{0, 1, 2}"],a:2,e:"x = −1 ได้ y = 1, x = 0 ได้ y = 0, x = 1 ได้ y = 1 ค่า y ที่ได้คือ 0 และ 1 (เขียนซ้ำไม่ต้อง) จึงเป็น {0, 1}"}
+];
+const T=20,$=id=>document.getElementById(id);
+let i,score,left,tick,locked;
+const show=id=>document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));
+
+function start(){i=0;score=0;$('sc').textContent=0;show('s-play');load()}
+function load(){
+  const d=QS[i];locked=false;
+  $('no').textContent=i+1;$('q').textContent=d.q;
+  $('fb').className='fb';$('nx').className='next';
+  $('opts').innerHTML='';
+  d.o.forEach((t,n)=>{
+    const b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="k">'+(n+1)+'</span><span></span>';
+    b.lastChild.textContent=t;b.onclick=()=>pick(n);$('opts').appendChild(b);
+  });
+  left=T;draw();clearInterval(tick);
+  tick=setInterval(()=>{left-=.1;if(left<=0){left=0;draw();timeout()}else draw()},100);
+}
+function draw(){
+  $('fill').style.transform='scaleX('+left/T+')';
+  $('fill').className=left<=6?'low':'';
+  $('sec').textContent=Math.ceil(left)+' วินาที';
+}
+function reveal(chosen){
+  locked=true;clearInterval(tick);
+  const d=QS[i],bs=$('opts').children;
+  [...bs].forEach((b,n)=>{b.disabled=true;
+    if(n===d.a)b.classList.add('right');
+    else if(n===chosen)b.classList.add('wrong');
+    else b.classList.add('dim')});
+  $('nx').className='next on';
+  $('nb').textContent=i===QS.length-1?'ดูผลลัพธ์':'ข้อต่อไป';
+  $('nb').focus();
+}
+function pick(n){
+  if(locked)return;
+  const d=QS[i],ok=n===d.a;reveal(n);
+  const fb=$('fb');
+  if(ok){score+=10;$('sc').textContent=score;fb.className='fb on ok';
+    $('fbt').textContent='ถูกต้อง เก่งมาก +10 คะแนน';$('fbp').textContent='';
+  }else{fb.className='fb on no';
+    $('fbt').textContent='ไม่เป็นไรนะ ลองดูเฉลยด้วยกัน';
+    $('fbp').textContent='คำตอบที่ถูกคือ “'+d.o[d.a]+'” — '+d.e;}
+}
+function timeout(){
+  if(locked)return;const d=QS[i];reveal(-1);
+  $('fb').className='fb on no';
+  $('fbt').textContent='หมดเวลาแล้ว ไม่เป็นไร ค่อยๆ คิดได้';
+  $('fbp').textContent='คำตอบที่ถูกคือ “'+d.o[d.a]+'” — '+d.e;
+}
+function next(){i++;if(i<QS.length)load();else finish()}
+function finish(){
+  show('s-end');$('escore').textContent=score;
+  const ok=score/10;let t,m;
+  if(ok>=9){t='ยอดเยี่ยมมาก';m='เข้าใจเรื่องความสัมพันธ์ได้แน่นมากเลย พร้อมไปต่อบทถัดไปแล้ว'}
+  else if(ok>=7){t='ทำได้ดีมาก';m='เข้าใจหลักการได้ดีแล้ว ลองกลับไปดูข้อที่พลาดอีกนิด ก็จะแม่นยิ่งขึ้น'}
+  else if(ok>=4){t='เริ่มต้นได้ดีแล้ว';m='ความเข้าใจกำลังก่อตัว ทบทวนเรื่องคู่อันดับ โดเมน และเรนจ์อีกรอบ แล้วจะชัดขึ้นแน่นอน'}
+  else{t='ขอบคุณที่ลองนะ';m='เรื่องใหม่ต้องใช้เวลาเป็นธรรมดา ถามครูหรือเพื่อนในข้อที่ยังสงสัยได้เลย แล้วลองเล่นอีกรอบ'}
+  $('etitle').textContent=t;$('emsg').textContent=m;
+}
+$('go').onclick=start;$('nb').onclick=next;$('again').onclick=start;
+document.addEventListener('keydown',e=>{
+  if(!$('s-play').classList.contains('on'))return;
+  if(!locked&&e.key>='1'&&e.key<='4')pick(+e.key-1);
+});
+</script>
+</body>
+</html>
